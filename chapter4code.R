@@ -3,6 +3,7 @@ library(rjags)
 library(MCMCpack)
 library(RColorBrewer)
 library(latex2exp)
+library(GISTools)
 
 # creating colour scheme(s) 
 coul <- brewer.pal(8, "Dark2")
