@@ -1,0 +1,17 @@
+
+model{
+  for(j in 1:K){
+    alpha[j] <- 1 # setting elements so prior equiv. to uniform
+  }
+  for(i in 1:n){
+      y[i, 1:K] ~ ddirch(lambda*pi*robust[i, ])
+      
+  }
+  pi ~ ddirch(alpha) # prior for the true 
+  lambda ~ dgamma(0.001, 0.001) # prior for lambda
+  for(s in 1:n){
+    for(t in 1:K){
+      robust[s, t] ~ dunif(0, 10)
+    }
+  }
+}

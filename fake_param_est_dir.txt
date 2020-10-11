@@ -1,0 +1,19 @@
+
+model{
+  for(t in 1:tau_adj){
+    y[t, ] ~ ddirch(lambda*pi)
+  }
+  for(u in (tau_adj+1):T){
+    bias[u] <- A / (exp(beta * (u - tau)))
+    param_vector[u, 1:K] <- lambda * ((1 - bias[u]) * pi+ bias[u] * rho)
+    y[u, ] ~ ddirch(param_vector[u, 1:K])
+  }
+  lambda ~ dgamma(0.001, 0.001)
+  beta ~ dgamma(0.01, 0.01)
+  for(k in 1:K){
+    alpha[k] <- 1
+  }
+  A ~ dunif(0, 1)
+  pi ~ ddirch(alpha)
+  rho ~ ddirch(alpha)
+}

@@ -1,0 +1,13 @@
+  
+model{
+  for(t in 1:T){
+    bias[t] <- ifelse(t < fake, 0, A / (exp(beta * (t - fake))))
+    y[t] ~ dnorm(mu + bias[t], tau)
+  }
+  mu ~ dnorm(0, 0.001)
+  A ~ dunif(-40, 40)
+  beta ~ dgamma(0.001, 0.001)
+  tau ~ dgamma(0.01, 0.01)
+  sigma <- 1 / sqrt(tau)
+  fake ~ dunif(0, 30)
+}

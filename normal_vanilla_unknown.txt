@@ -1,0 +1,9 @@
+
+model{
+  tau ~ dgamma(0.01, 0.01)
+  mu ~ dnorm(0, 0.001)
+  for(t in 1:T){
+    z[t] ~ dnorm(mu, tau)
+  }
+  sigma <- 1 / sqrt(tau)
+}

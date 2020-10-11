@@ -1,0 +1,11 @@
+
+model{
+  y[1] ~ dnorm(mu, tau)
+  phi ~ dunif(-1, 1)
+  mu ~ dnorm(0, 0.001)
+  sigma <- 1 / sqrt(tau)
+  for(t in 2:T){
+    m[t] = mu*(1-phi) + phi*y[t-1]
+    y[t] ~ dnorm(m[t], tau)
+  }
+}

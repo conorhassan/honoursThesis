@@ -1,0 +1,26 @@
+
+model{
+  for(h in 1:pre){
+    y[h, 1:K] ~ ddirch(lambda*pi)
+  }
+  for(i in post:T){
+    z[i, 1:K] ~ ddirch(lambda*pi)
+  }
+  for(j in post:T){
+    effect[j] <- a * exp(-b * (j - tau))
+    upper_constraint[j] <- max(0.999, z[j, 1] + effect[j])
+    y[j, 1] ~ dsum(upper_constraint[j])
+    leftover_val[j] <- z[j, 1] + effect[j] - upper_constraint[j]
+    lower_constraint[j] <- max(0.0005, z[j, 2] - leftover_val[j])
+    y[j, 2] ~ dsum(lower_constraint[j])
+    proxy[j] <- 1 - y[j, 1] - y[j, 2]
+    y[j, 3] ~ dsum(proxy[j])
+  }
+  for(k in 1:K){
+    alpha[k] <- 1
+  }
+  pi ~ ddirch(alpha)
+  lambda ~ dgamma(0.001, 0.001)
+  a ~ dunif(0, 2)
+  b ~ dunif(0, 2)
+}

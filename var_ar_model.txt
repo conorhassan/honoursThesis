@@ -1,0 +1,16 @@
+ 
+model{
+  for(i in 1:T){
+    x[i] ~ dunif(-1, 1)
+    c[i] ~ dunif(0, 40)
+  }
+  y[1] ~ dnorm(mu + c[1]*x[1], tau)
+  phi ~ dunif(-1, 1)
+  mu ~ dnorm(0, 0.001)
+  tau ~ dgamma(0.01, 0.01)
+  sigma <- 1 / sqrt(tau)
+  for(t in 2:T){
+    m[t] = mu*(1-phi) + phi*y[t-1] + c[t]*x[t]
+    y[t] ~ dnorm(m[t], tau)
+  }
+}

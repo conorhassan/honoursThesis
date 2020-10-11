@@ -1,0 +1,15 @@
+
+model{
+  y[1] ~ dnorm(mu, tau)
+  for(t in 2:T){
+    bias[t] <- ifelse(t == fake, A, 0)
+    m[t] = mu*(1-phi) + phi*y[t-1]
+    y[t] ~ dnorm(m[t] + bias[t], tau)
+  }
+  mu ~ dnorm(0, 0.001)
+  A ~ dunif(-40, 40)
+  tau ~ dgamma(0.01, 0.01)
+  sigma <- 1 / sqrt(tau)
+  fake ~ dcat(prior_time)
+  phi ~ dunif(-1, 1)
+}

@@ -1,0 +1,14 @@
+
+model{
+  for(i in 1:N){
+      m[i] = mu + c[i]*x[i]
+      y[i] ~ dnorm(m[i], tau)
+  }
+  for(j in 1:N){
+      x[j] ~ dunif(-1, 1)
+      c[j] ~ dunif(0, 40)
+  } 
+  tau ~ dgamma(0.01, 0.01)
+  sigma = 1/sqrt(tau)
+  mu ~ dnorm(0, 0.001)
+}
